@@ -12,7 +12,7 @@ import open_data
 import regresion
 import csv2nc
 import plot_sensitivity_maps
-
+import scipy
 #Open data--------------------------------------------
 ruta = '/pikachu/datos/julia.mindlin/CMIP6_ensambles/preprocesados' #Dropbox/DATOS_CMIP6' #/historical/mon/tas/past'
 var = 'mon/psl'
