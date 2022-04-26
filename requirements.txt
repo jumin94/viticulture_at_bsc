@@ -1,0 +1,14 @@
+matplotlib 
+sklearn
+numpy 
+pandas
+xarray
+os
+cartopy
+fnmatch
+statsmodels
+glob
+math
+netCDF4
+mpl_toolkits
+
