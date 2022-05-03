@@ -34,6 +34,9 @@ def cross_year_season(month,season):
     #Season is a list with two values, begining and endig season
     return (month >= season[0]) & (month <= season[1])
 
+def ONDJFMA_season(month,season):
+    #Season is a list with two values, begining and endig season
+    return (month >= season[0]) | (month <= season[1])
 
 def seasonal_data_month(data,season):
     # select DJF
@@ -116,6 +119,30 @@ def tropical_warming_time_series_flex_season(dato,season,models,scenarios):
         TS_h[model] = ta_h_MEAN; TS_rcp[model] = ta_rcp_MEAN
     return TS_h, TS_rcp
 
+def tropical_warming_time_series_ONDJFMA_season(dato,season,models,scenarios):
+    TS_h = {}; TS_rcp = {}
+    for model in models:
+        ta_hist = xr.open_dataset(dato[scenarios[0]][model]['1940-1969'][0])
+        ta_rcp5 = xr.open_dataset(dato[scenarios[1]][model]['2070-2099'][0])
+        #Selecciono las variables y calculo los indices
+        ta_h = ta_hist.ta
+        ta_h.attrs = ta_hist.ta.attrs
+        ta_rcp = ta_rcp5.ta
+        ta_rcp.attrs = ta_rcp5.ta.attrs
+
+        seasonalh = ta_h.sel(time=ONDJFMA_season(ta_h['time.month'],season))
+    
+        ta_h_lonMEAN = seasonalh.mean(dim='lon')
+        ta_h_lonMEAN = ta_h_lonMEAN.isel(plev=0)
+        ta_h_MEAN= ta_h_lonMEAN.sel(lat=slice(15,-15)).mean(dim='lat')
+
+        seasonalrcp = ta_rcp.sel(time=ONDJFMA_season(ta_rcp['time.month'],season))
+        ta_rcp_lonMEAN = seasonalrcp.mean(dim='lon')
+        ta_rcp_lonMEAN = ta_rcp_lonMEAN.isel(plev=0)
+        ta_rcp_MEAN = ta_rcp_lonMEAN.sel(lat=slice(15,-15)).mean(dim='lat') 
+      
+        TS_h[model] = ta_h_MEAN; TS_rcp[model] = ta_rcp_MEAN
+    return TS_h, TS_rcp
 
 def tropical_warming(dato,season,models,scenarios):
     DT_SONi = np.array([])
@@ -235,6 +262,32 @@ def global_warming_time_series_flex_season(dato,season,models,scenarios):
         TS_h[model] = ta_h_MEAN; TS_rcp[model] = ta_rcp_MEAN
     return TS_h, TS_rcp
 
+def global_warming_time_series_ONDJFMA_season(dato,season,models,scenarios):
+    TS_h = {}; TS_rcp = {}
+    for model in models:
+        ta_hist = xr.open_dataset(dato[scenarios[0]][model]['1940-1969'][0])
+        ta_rcp5 = xr.open_dataset(dato[scenarios[1]][model]['2070-2099'][0])
+        #Selecciono las variables y calculo los indices
+        ta_h = ta_hist.tas
+        ta_h.attrs = ta_hist.tas.attrs
+        ta_rcp = ta_rcp5.tas
+        ta_rcp.attrs = ta_rcp5.tas.attrs
+        
+        seasonalh = ta_h.sel(time=ONDJFMA_season(ta_h['time.month'],season))
+        ta_h_lonMEAN = seasonalh.mean(dim='lon')
+        ta_h_lonMEAN = ta_h_lonMEAN.fillna(ta_h_lonMEAN[-1]-1)
+        lats = np.cos(ta_h_lonMEAN.lat.values*np.pi/180)
+        s = sum(lats)
+        ta_h_MEAN = (ta_h_lonMEAN*lats).sum(dim='lat')/s
+
+        seasonalrcp = ta_rcp.sel(time=ONDJFMA_season(ta_rcp['time.month'],season))
+        ta_rcp_lonMEAN = seasonalrcp.mean(dim='lon')
+        ta_rcp_lonMEAN = ta_rcp_lonMEAN.fillna(ta_rcp_lonMEAN[-1]-1)
+        lats = np.cos(ta_rcp_lonMEAN.lat.values*np.pi/180)
+        s = sum(lats)
+        ta_rcp_MEAN = (ta_rcp_lonMEAN*lats).sum(dim='lat')/s
+        TS_h[model] = ta_h_MEAN; TS_rcp[model] = ta_rcp_MEAN
+    return TS_h, TS_rcp
 
 def global_warming(dato,season,models,scenarios):
     DTi = np.array([])
@@ -639,6 +692,31 @@ def asym_sst_box_time_series_flex_season(dato,season,models,scenarios,box):
         tos_h_asym_box = tos_h_asym.sel(lat=slice(box[0],box[1])).sel(lon=slice(box[2],box[3])).mean(dim='lat').mean(dim='lon')
 
         seasonalrcp = tos_rcp.sel(time=cross_year_season(tos_rcp['time.month'],season))
+        tos_rcp_lonMEAN = seasonalrcp.mean(dim='lon')
+        tos_rcp_asym = seasonalrcp - tos_rcp_lonMEAN
+        tos_rcp_asym_box = tos_rcp_asym.sel(lat=slice(box[0],box[1])).sel(lon=slice(box[2],box[3])).mean(dim='lat').mean(dim='lon')
+
+        TS_h[model] = tos_h_asym_box; TS_rcp[model] = tos_rcp_asym_box
+    return TS_h, TS_rcp
+
+def asym_sst_box_time_series_flex_season(dato,season,models,scenarios,box):
+    TS_h = {}; TS_rcp = {}
+    for model in models:
+        print(model)
+        tos_hist = xr.open_dataset(dato[scenarios[0]][model]['1940-1969'][0])
+        tos_rcp5 = xr.open_dataset(dato[scenarios[1]][model]['2070-2099'][0])
+        #Selecciono las variables y calculo los indices
+        tos_h = tos_hist.tos
+        tos_h.attrs = tos_hist.tos.attrs
+        tos_rcp = tos_rcp5.tos
+        tos_rcp.attrs = tos_rcp5.tos.attrs
+
+        seasonalh = tos_h.sel(time=ONDJFMA_season(tos_h['time.month'],season))
+        tos_h_lonMEAN = seasonalh.mean(dim='lon')
+        tos_h_asym = seasonalh - tos_h_lonMEAN 
+        tos_h_asym_box = tos_h_asym.sel(lat=slice(box[0],box[1])).sel(lon=slice(box[2],box[3])).mean(dim='lat').mean(dim='lon')
+
+        seasonalrcp = tos_rcp.sel(time=ONDJFMA_season(tos_rcp['time.month'],season))
         tos_rcp_lonMEAN = seasonalrcp.mean(dim='lon')
         tos_rcp_asym = seasonalrcp - tos_rcp_lonMEAN
         tos_rcp_asym_box = tos_rcp_asym.sel(lat=slice(box[0],box[1])).sel(lon=slice(box[2],box[3])).mean(dim='lat').mean(dim='lon')
