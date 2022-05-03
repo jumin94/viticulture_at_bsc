@@ -1,16 +1,11 @@
 #Este programa toma los coeficientes de la regresion y hace de un .csv un .nc
-import cartopy.crs as ccrs
 import numpy as np
-import cartopy.feature
-from cartopy.util import add_cyclic_point
 import matplotlib.path as mpath
 import os
 import glob
 import pandas as pd
 import xarray as xr
 import netCDF4
-import matplotlib
-import matplotlib.pyplot as plt
 #import psyplot.project as psy
 
 

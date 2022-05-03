@@ -69,7 +69,7 @@ def plot_sensitivity_pr_viejo(indices,indices_pval,frac_var,path_fig):
     verts = np.vstack([np.sin(theta), np.cos(theta)]).T
     circle = mpath.Path(verts * radius + center)
     ax1.set_boundary(circle, transform=ax1.transAxes)
-    clevels = np.arange(-.2,.24,0.04)
+    clevels = np.arange(-.2,.22,0.02)
     im1=ax1.contourf(lon_c, lat, ta,clevels,transform=data_crs,cmap=cmapPr,extend='both')
     #cnt=ax1.contour(lonh,lath, climU850,levels=[8],transform=data_crs,linewidths=1.2, colors='black', linestyles='-')
     #plt.clabel(cnt,inline=True,fmt='%1.0f',fontsize=8)
@@ -278,7 +278,7 @@ def plot_sensitivity_pr(indices,indices_pval,frac_var,path_fig,title):
     verts = np.vstack([np.sin(theta), np.cos(theta)]).T
     circle = mpath.Path(verts * radius + center)
     ax1.set_boundary(circle, transform=ax1.transAxes)
-    clevels = np.arange(-.16,.2,0.04)
+    clevels = np.arange(-.16,.18,0.02)
     im1=ax1.contourf(lon_c, lat, ta,clevels,transform=data_crs,cmap=cmapPr,extend='both')
     levels = [tap.min(),0.05,tap.max()]
     ax1.contourf(lon_c, lat, tap,levels, transform=data_crs,levels=levels, hatches=["...", ""], alpha=0)
@@ -1254,7 +1254,7 @@ def plot_sensitivity_zg(indices,indices_pval,frac_var,path_fig,title):
 
     return fig 
 
-def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
+def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title,extent=[-180,180,-90,0]):
     
     GlobalWarming = indices[0]
     TropicalWarming = indices[1]
@@ -1308,7 +1308,7 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     ax1.add_feature(cartopy.feature.COASTLINE,alpha=.5)
     ax1.add_feature(cartopy.feature.BORDERS, linestyle='-', alpha=.5)
     ax1.gridlines(crs=data_crs, linewidth=0.3, linestyle='-')
-    ax1.set_extent([-180, 180, -90, 0], ccrs.PlateCarree())
+    ax1.set_extent(extent, ccrs.PlateCarree())
     plt1_ax = plt.gca()
     left_1, bottom_1, width_1, height_1 = plt1_ax.get_position().bounds
 
@@ -1327,7 +1327,7 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     ax2.add_feature(cartopy.feature.COASTLINE,alpha=.5)
     ax2.add_feature(cartopy.feature.BORDERS, linestyle='-', alpha=.5)
     ax2.gridlines(crs=data_crs, linewidth=0.3, linestyle='-')
-    ax2.set_extent([-180, 180, -90, 0], ccrs.PlateCarree())
+    ax2.set_extent(extent, ccrs.PlateCarree())
     plt2_ax = plt.gca()
     left_2, bottom_2, width_2, height_2 = plt2_ax.get_position().bounds
 
@@ -1346,7 +1346,7 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     ax3.add_feature(cartopy.feature.COASTLINE,alpha=.5)
     ax3.add_feature(cartopy.feature.BORDERS, linestyle='-', alpha=.5)
     ax3.gridlines(crs=data_crs, linewidth=0.3, linestyle='-')
-    ax3.set_extent([-180, 180, -90, 0], ccrs.PlateCarree())
+    ax3.set_extent(extent, ccrs.PlateCarree())
     plt3_ax = plt.gca()
     left_3, bottom_3, width_3, height_3 = plt3_ax.get_position().bounds
 
@@ -1365,7 +1365,7 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     ax4.add_feature(cartopy.feature.COASTLINE,alpha=.5)
     ax4.add_feature(cartopy.feature.BORDERS, linestyle='-', alpha=.5)
     ax4.gridlines(crs=data_crs, linewidth=0.3, linestyle='-')
-    ax4.set_extent([-180, 180, -90, 0], ccrs.PlateCarree())
+    ax4.set_extent(extent, ccrs.PlateCarree())
     plt4_ax = plt.gca()
     left_4, bottom_4, width_4, height_4 = plt4_ax.get_position().bounds
     
@@ -1384,7 +1384,7 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     ax5.add_feature(cartopy.feature.COASTLINE,alpha=.5)
     ax5.add_feature(cartopy.feature.BORDERS, linestyle='-', alpha=.5)
     ax5.gridlines(crs=data_crs, linewidth=0.3, linestyle='-')
-    ax5.set_extent([-180, 180, -90, 0], ccrs.PlateCarree())
+    ax5.set_extent(extent, ccrs.PlateCarree())
     plt5_ax = plt.gca()
     left_5, bottom_5, width_5, height_5 = plt5_ax.get_position().bounds
 
@@ -1401,7 +1401,7 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     ax6.add_feature(cartopy.feature.COASTLINE,alpha=.5)
     ax6.add_feature(cartopy.feature.BORDERS, linestyle='-', alpha=.5)
     ax6.gridlines(crs=data_crs, linewidth=0.3, linestyle='-')
-    ax6.set_extent([-180, 180, -90, 0], ccrs.PlateCarree())
+    ax6.set_extent(extent, ccrs.PlateCarree())
     plt6_ax = plt.gca()
     left_6, bottom_6, width_6, height_6 = plt6_ax.get_position().bounds
 
@@ -1448,8 +1448,6 @@ def plot_sensitivity_tas(indices,indices_pval,frac_var,path_fig,title):
     plt.clf
 
     return fig 
-
-
 
 def indices_box(indices,indices_names,path):
     fig = plt.figure(figsize=(4, 6), sharey=True)
@@ -1811,8 +1809,7 @@ def plot_sensitivity_zg_carree(indices,indices_pval,frac_var,path_fig,title):
 
     return fig
 
-
-def plot_sensitivity_tas_carree(indices,indices_pval,frac_var,path_fig,title,extent=[-180, 180, -90, 0]):
+def plot_sensitivity_tas_carree(indices,indices_pval,frac_var,path_fig,title,clevels = np.arange(-.5,.55,0.05),extent=[-180, 180, -90, 0]):
  
 
     GlobalWarming = indices[0]
@@ -1854,7 +1851,7 @@ def plot_sensitivity_tas_carree(indices,indices_pval,frac_var,path_fig,title,ext
 
     ax1 = plt.subplot(3,2,1,projection=projection)
     ax1.set_extent([0,359.9, -90, 0], crs=data_crs)
-    clevels = np.arange(-.5,.55,0.05)
+    #clevels = np.arange(-.5,.55,0.05)
     im1=ax1.contourf(lon_c, lat, ta,clevels,transform=data_crs,cmap=cmap,extend='both')
     levels = [tap.min(),0.05,tap.max()]
     ax1.contourf(lon_c, lat, tap,levels, transform=data_crs,levels=levels, hatches=["...", ""], alpha=0)
@@ -1939,21 +1936,21 @@ def plot_sensitivity_tas_carree(indices,indices_pval,frac_var,path_fig,title,ext
     sixth_plot_left = plt6_ax.get_position().bounds[0]
     colorbar_axes6 = fig.add_axes([left_6 +0.31, bottom_6-0.1 , 0.01, height_6*1])
     cbar = fig.colorbar(im6, colorbar_axes6, orientation='vertical')
-    cbar.set_label('m$^{-1}$K$^{-1}$',fontsize=14) #rotation = radianes
+    cbar.set_label('K$^{-1}$K$^{-1}$',fontsize=14) #rotation = radianes
     cbar.ax.tick_params(axis='both',labelsize=14)
 
     third_plot_left = plt3_ax.get_position().bounds[0]
     colorbar_axes3 = fig.add_axes([left_3 +0.31, bottom_3-0.22, 0.01, height_3*1.4])
     cbar = fig.colorbar(im3, colorbar_axes3, orientation='vertical')
     cbar.set_label(' ',fontsize=14) #rotation = radianes
-    cbar.set_label('m$^{-1}$K$^{-1}$',fontsize=14) #rotation = radianes
+    cbar.set_label('K$^{-1}$K$^{-1}$',fontsize=14) #rotation = radianes
     cbar.ax.tick_params(axis='both',labelsize=14)
     
     second_plot_left = plt2_ax.get_position().bounds[0]
     colorbar_axes2 = fig.add_axes([left_7 +0.25, bottom_3-0.22, 0.01, height_2*1.4])
     cbar = fig.colorbar(im2, colorbar_axes2, orientation='vertical')
     cbar.set_label(' ',fontsize=14) #rotation = radianes
-    cbar.set_label('m$^{-1}$K$^{-1}$',fontsize=14) #rotation = radianes
+    cbar.set_label('K$^{-1}$K$^{-1}$',fontsize=14) #rotation = radianes
     cbar.ax.tick_params(axis='both',labelsize=14)
 
     seventh_plot_left = plt7_ax.get_position().bounds[0]
@@ -1966,6 +1963,8 @@ def plot_sensitivity_tas_carree(indices,indices_pval,frac_var,path_fig,title,ext
     plt.clf
 
     return fig
+
+
 
 def plot_sensitivity_pr_carree(indices,indices_pval,frac_var,path_fig,title,extent=[-180, 180, -90, 0]):
     
