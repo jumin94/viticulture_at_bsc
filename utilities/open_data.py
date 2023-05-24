@@ -1,24 +1,12 @@
 #funciones.py
-
+#Imports
 import numpy as np
 import os
 import glob
 import pandas as pd
 import xarray as xr
 import os, fnmatch
-import matplotlib.pyplot as plt
-# Subplot number three for mean changes and other figures
-import cartopy.crs as ccrs
-import cartopy.feature
-from cartopy.util import add_cyclic_point
-import matplotlib.path as mpath
 import netCDF4
-import matplotlib
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib as mpl
-mpl.rcParams['hatch.linewidth'] = 0.5  # previous pdf hatch linewidth
-import cartopy.util as cutil
 
 def cargo_todo_zg(scenarios,models,ruta,var):
     os.chdir(ruta)
